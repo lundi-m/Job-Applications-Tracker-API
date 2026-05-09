@@ -1,0 +1,37 @@
+version: '3.9'
+
+services:
+  app:
+    build: .
+    container_name: job_tracker_app
+
+    depends_on:
+      - db
+
+    ports:
+      - "8080:8080"
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/job_tracker
+      SPRING_DATASOURCE_USERNAME: tracker
+      SPRING_DATASOURCE_PASSWORD: JOBtracker
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_PROFILES_ACTIVE: docker
+
+  db:
+    image: postgres:15
+    container_name: job_tracker_db
+
+    environment:
+      POSTGRES_DB: job_tracker
+      POSTGRES_USER: tracker
+      POSTGRES_PASSWORD: JOBtracker
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - job-applications-db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:
