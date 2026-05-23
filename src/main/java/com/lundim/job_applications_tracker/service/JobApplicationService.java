@@ -30,7 +30,7 @@ public class JobApplicationService {
         JobApplication jobApplication = JobApplication.builder()
                 .companyName(dto.getCompanyName())
                 .jobTitle(dto.getJobTitle())
-                .jobType(dto.getJobType())
+                .jobType(JobType.fromString(dto.getJobType()))
                 .status(ApplicationStatus.APPLIED)
                 .location(dto.getLocation())
                 .dateApplied(dateApplied)
