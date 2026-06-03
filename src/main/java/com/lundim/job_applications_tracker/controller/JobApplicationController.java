@@ -5,7 +5,6 @@ import com.lundim.job_applications_tracker.dto.*;
 import com.lundim.job_applications_tracker.service.JobApplicationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JobApplicationController {
 
-    @Autowired
-    private JobApplicationService service;
+    private final JobApplicationService service;
 
     @PostMapping
     public ResponseEntity<JobApplicationResponseDTO> createJobApplication(

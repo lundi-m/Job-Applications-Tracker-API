@@ -57,7 +57,7 @@ public class TestDataUtil {
         return CreateJobApplicationDTO.builder()
                 .companyName("Hisense")
                 .jobTitle("Developer")
-                .jobType(JobType.INTERNSHIP)
+                .jobType("Part time")
                 .location("Remote")
                 .dateApplied(LocalDate.of(2026, 3, 21))
                 .build();
@@ -67,7 +67,7 @@ public class TestDataUtil {
         return CreateJobApplicationDTO.builder()
                 .companyName("Hisense")
                 .jobTitle("IT Support")
-                .jobType(JobType.INTERNSHIP)
+                .jobType("FULL TIME")
                 .location("Springs")
                 .build();
     }
