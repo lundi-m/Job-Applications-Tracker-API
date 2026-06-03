@@ -21,7 +21,7 @@ public class CreateJobApplicationDTO {
     private String jobTitle;
 
     @NotNull
-    private JobType jobType;
+    private String jobType;
 
     @NotBlank
     private String location;
