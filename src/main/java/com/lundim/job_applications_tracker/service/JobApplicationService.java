@@ -3,6 +3,7 @@ package com.lundim.job_applications_tracker.service;
 import com.lundim.job_applications_tracker.dto.CreateJobApplicationDTO;
 import com.lundim.job_applications_tracker.dto.JobApplicationResponseDTO;
 import com.lundim.job_applications_tracker.dto.UpdateApplicationStatusDTO;
+import com.lundim.job_applications_tracker.exception.ResourceNotFoundException;
 import com.lundim.job_applications_tracker.model.ApplicationStatus;
 import com.lundim.job_applications_tracker.model.JobApplication;
 import com.lundim.job_applications_tracker.model.JobType;
