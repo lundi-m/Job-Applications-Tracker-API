@@ -51,9 +51,8 @@ public class JobApplicationService {
     // Filter by id
     public JobApplicationResponseDTO getJobApplicationById(Long id) {
         JobApplication jobApplication = repository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "Job Application not found with id: " + id
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Job Application with id: " + id + " not found."
                 ));
         return mapToDTO(jobApplication);
     }
