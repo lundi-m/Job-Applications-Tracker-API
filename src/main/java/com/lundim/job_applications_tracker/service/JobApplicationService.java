@@ -3,14 +3,13 @@ package com.lundim.job_applications_tracker.service;
 import com.lundim.job_applications_tracker.dto.CreateJobApplicationDTO;
 import com.lundim.job_applications_tracker.dto.JobApplicationResponseDTO;
 import com.lundim.job_applications_tracker.dto.UpdateApplicationStatusDTO;
+import com.lundim.job_applications_tracker.exception.ResourceNotFoundException;
 import com.lundim.job_applications_tracker.model.ApplicationStatus;
 import com.lundim.job_applications_tracker.model.JobApplication;
 import com.lundim.job_applications_tracker.model.JobType;
 import com.lundim.job_applications_tracker.repository.JobApplicationsRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -51,9 +50,8 @@ public class JobApplicationService {
     // Filter by id
     public JobApplicationResponseDTO getJobApplicationById(Long id) {
         JobApplication jobApplication = repository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "Job Application not found with id: " + id
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Job Application with id: " + id + " not found."
                 ));
         return mapToDTO(jobApplication);
     }
