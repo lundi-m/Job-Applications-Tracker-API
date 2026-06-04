@@ -81,7 +81,7 @@ public class JobApplicationService {
 
     // Filter by Job Type
     public List<JobApplicationResponseDTO> getByJobType(String jobTypeString) {
-        JobType jobType = JobType.valueOf(jobTypeString.toUpperCase()); // safe conversion
+        JobType jobType = JobType.fromString(jobTypeString);
         List<JobApplication> jobs = repository.findByJobType(jobType);
         return jobs.stream().map(this::mapToDTO).collect(Collectors.toList());
     }
