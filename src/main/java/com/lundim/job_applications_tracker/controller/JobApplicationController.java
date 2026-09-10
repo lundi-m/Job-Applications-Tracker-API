@@ -4,10 +4,16 @@ package com.lundim.job_applications_tracker.controller;
 import com.lundim.job_applications_tracker.dto.applications.CreateJobApplication;
 import com.lundim.job_applications_tracker.dto.applications.JobApplicationResponse;
 import com.lundim.job_applications_tracker.dto.applications.UpdateApplicationStatus;
+import com.lundim.job_applications_tracker.model.enums.ApplicationStatus;
+import com.lundim.job_applications_tracker.model.enums.JobType;
 import com.lundim.job_applications_tracker.service.JobApplicationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,46 +27,30 @@ public class JobApplicationController {
 
     @PostMapping
     public ResponseEntity<JobApplicationResponse> createJobApplication(
+            @AuthenticationPrincipal UserDetails userDetails,
             @Valid @RequestBody CreateJobApplication dto
     ) {
-        JobApplicationResponse response = service.createJobApplication(dto);
+        JobApplicationResponse response = service.createJobApplication(userDetails.getUsername(), dto);
         return ResponseEntity.status(201).body(response);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<JobApplicationResponse> getJobApplicationById(@PathVariable Long id) {
-        JobApplicationResponse jobApplicationById = service.getJobApplicationById(id);
-        return ResponseEntity.ok(jobApplicationById);
-    }
     @GetMapping
-    public ResponseEntity<List<JobApplicationResponse>> getAllJobApplications() {
-        List<JobApplicationResponse> jobApplications = service.getAllJobApplications();
-        return ResponseEntity.ok(jobApplications);
-    }
-
-    @GetMapping("/company/{companyName}")
-    public ResponseEntity<List<JobApplicationResponse>> getByCompanyName(@PathVariable String companyName) {
-        return ResponseEntity.ok(service.getByCompanyName(companyName));
-    }
-
-    @GetMapping("/status/{status}")
-    public ResponseEntity<List<JobApplicationResponse>> getByStatus(@PathVariable String status) {
-        return ResponseEntity.ok(service.getByStatus(status));
-    }
-
-    @GetMapping("/job-type/{jobType}")
-    public ResponseEntity<List<JobApplicationResponse>> getByJobType(@PathVariable String jobType) {
-        return ResponseEntity.ok(service.getByJobType(jobType));
-    }
-
-    @GetMapping("/job-title/{jobTitle}")
-    public ResponseEntity<List<JobApplicationResponse>> getByJobTitle(@PathVariable String jobTitle) {
-        return ResponseEntity.ok(service.getByJobTitle(jobTitle));
-    }
-
-    @GetMapping("/location/{location}")
-    public ResponseEntity<List<JobApplicationResponse>> getByLocation(@PathVariable String location) {
-        return ResponseEntity.ok(service.getByLocation(location));
+    public ResponseEntity<Page<JobApplicationResponse>> getApplications(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestParam(required = false) String companyName,
+            @RequestParam(required = false) String jobTitle,
+            @RequestParam(required = false) ApplicationStatus status,
+            @RequestParam(required = false) JobType jobType,
+            @RequestParam(required = false) String location,
+            Pageable pageable) {
+        return ResponseEntity.ok(service.getApplications(userDetails.getUsername(),
+                status,
+                jobTitle,
+                companyName,
+                jobType,
+                location,
+                pageable
+        ));
     }
 
     @PatchMapping("/{id}/status")

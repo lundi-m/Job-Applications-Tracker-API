@@ -4,11 +4,17 @@ import com.lundim.job_applications_tracker.dto.applications.CreateJobApplication
 import com.lundim.job_applications_tracker.dto.applications.JobApplicationResponse;
 import com.lundim.job_applications_tracker.dto.applications.UpdateApplicationStatus;
 import com.lundim.job_applications_tracker.exception.ResourceNotFoundException;
+import com.lundim.job_applications_tracker.model.entity.CustomUser;
 import com.lundim.job_applications_tracker.model.enums.ApplicationStatus;
 import com.lundim.job_applications_tracker.model.entity.JobApplication;
 import com.lundim.job_applications_tracker.model.enums.JobType;
 import com.lundim.job_applications_tracker.repository.JobApplicationsRepository;
+import com.lundim.job_applications_tracker.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -19,14 +25,18 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JobApplicationService {
 
+    private final UserRepository userRepository;
     private final JobApplicationsRepository repository;
 
-    // Create
-    public JobApplicationResponse createJobApplication(CreateJobApplication dto) {
+    public JobApplicationResponse createJobApplication(String email, CreateJobApplication dto) {
+
+        CustomUser user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         LocalDate dateApplied = dto.getDateApplied() != null ? dto.getDateApplied() : LocalDate.now();
 
         JobApplication jobApplication = JobApplication.builder()
+                .user(user)
                 .companyName(dto.getCompanyName())
                 .jobTitle(dto.getJobTitle())
                 .jobType(JobType.fromString(dto.getJobType()))
@@ -40,57 +50,29 @@ public class JobApplicationService {
         return mapToDTO(saved);
     }
 
-    // Read all
-    public List<JobApplicationResponse> getAllJobApplications() {
-        return repository.findAll().stream()
-                .map(this::mapToDTO)
-                .collect(Collectors.toList());
+    public Page<JobApplicationResponse> getApplications(String email,
+                                                        ApplicationStatus status,
+                                                        String jobTitle,
+                                                        String companyName,
+                                                        JobType jobType,
+                                                        String location,
+                                                        Pageable pageable) {
+
+        CustomUser user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+
+        Page<JobApplication> applications = repository.findApplications(user.getId(),
+                        companyName,
+                        jobTitle,
+                        status,
+                        jobType,
+                        location,
+                        pageable);
+
+        return applications.map(this::mapToDTO);
     }
 
-    // Filter by id
-    public JobApplicationResponse getJobApplicationById(Long id) {
-        JobApplication jobApplication = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Job Application with id: " + id + " not found."
-                ));
-        return mapToDTO(jobApplication);
-    }
-
-    // Filter by Company Name
-    public List<JobApplicationResponse> getByCompanyName(String companyName) {
-        List<JobApplication> jobs = repository.findByCompanyNameIgnoreCase(companyName);
-        return jobs.stream().
-                map(this::mapToDTO)
-                .collect(Collectors.toList());
-    }
-
-    // Filter by Application Status
-    public List<JobApplicationResponse> getByStatus(String status) {
-        ApplicationStatus applicationStatus = ApplicationStatus.fromString(status);
-        List<JobApplication> jobs = repository.findByStatus(applicationStatus);
-        return jobs.stream().map(this::mapToDTO).collect(Collectors.toList());
-    }
-
-    // Filter by Job Title
-    public List<JobApplicationResponse> getByJobTitle(String jobTitle) {
-        List<JobApplication> jobs = repository.findByJobTitle(jobTitle);
-        return jobs.stream().map(this::mapToDTO).collect(Collectors.toList());
-    }
-
-    // Filter by Job Type
-    public List<JobApplicationResponse> getByJobType(String jobTypeString) {
-        JobType jobType = JobType.fromString(jobTypeString);
-        List<JobApplication> jobs = repository.findByJobType(jobType);
-        return jobs.stream().map(this::mapToDTO).collect(Collectors.toList());
-    }
-
-    // Filter by Location
-    public List<JobApplicationResponse> getByLocation(String location) {
-        List<JobApplication> jobs = repository.findByLocationIgnoreCase(location);
-        return jobs.stream().map(this::mapToDTO).collect(Collectors.toList());
-    }
-
-    // Update application status
     public JobApplicationResponse updateJobStatus(Long id, UpdateApplicationStatus dto) {
         JobApplication job = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Job Application not found."));
@@ -102,7 +84,6 @@ public class JobApplicationService {
         return mapToDTO(repository.save(job));
     }
 
-    // Delete Job Application
     public void deleteJobApplication(Long id) {
         repository.deleteById(id);
     }
