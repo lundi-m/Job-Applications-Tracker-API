@@ -1,4 +1,4 @@
-package com.lundim.job_applications_tracker.model;
+package com.lundim.job_applications_tracker.model.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;

@@ -1,4 +1,4 @@
-package com.lundim.job_applications_tracker.model;
+package com.lundim.job_applications_tracker.model.enums;
 
 public enum ApplicationStatus {
     APPLIED,

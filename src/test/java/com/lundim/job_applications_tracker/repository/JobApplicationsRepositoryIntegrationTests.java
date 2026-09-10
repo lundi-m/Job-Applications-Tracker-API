@@ -1,8 +1,8 @@
 package com.lundim.job_applications_tracker.repository;
 
-import com.lundim.job_applications_tracker.model.ApplicationStatus;
-import com.lundim.job_applications_tracker.model.JobApplication;
-import com.lundim.job_applications_tracker.model.JobType;
+import com.lundim.job_applications_tracker.model.enums.ApplicationStatus;
+import com.lundim.job_applications_tracker.model.entity.JobApplication;
+import com.lundim.job_applications_tracker.model.enums.JobType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

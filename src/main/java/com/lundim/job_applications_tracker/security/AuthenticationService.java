@@ -2,7 +2,7 @@ package com.lundim.job_applications_tracker.security;
 
 import com.lundim.job_applications_tracker.dto.auth.RegisterRequest;
 import com.lundim.job_applications_tracker.dto.user.UserResponse;
-import com.lundim.job_applications_tracker.model.CustomUser;
+import com.lundim.job_applications_tracker.model.entity.CustomUser;
 import com.lundim.job_applications_tracker.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

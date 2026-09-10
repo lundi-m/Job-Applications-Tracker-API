@@ -1,5 +1,7 @@
-package com.lundim.job_applications_tracker.model;
+package com.lundim.job_applications_tracker.model.entity;
 
+import com.lundim.job_applications_tracker.model.enums.ApplicationStatus;
+import com.lundim.job_applications_tracker.model.enums.JobType;
 import jakarta.persistence.*;
 import lombok.*;
 

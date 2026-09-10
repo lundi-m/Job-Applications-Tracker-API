@@ -1,6 +1,6 @@
 package com.lundim.job_applications_tracker.security;
 
-import com.lundim.job_applications_tracker.model.CustomUser;
+import com.lundim.job_applications_tracker.model.entity.CustomUser;
 import com.lundim.job_applications_tracker.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.User;

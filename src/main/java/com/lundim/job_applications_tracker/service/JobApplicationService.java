@@ -4,9 +4,9 @@ import com.lundim.job_applications_tracker.dto.applications.CreateJobApplication
 import com.lundim.job_applications_tracker.dto.applications.JobApplicationResponse;
 import com.lundim.job_applications_tracker.dto.applications.UpdateApplicationStatus;
 import com.lundim.job_applications_tracker.exception.ResourceNotFoundException;
-import com.lundim.job_applications_tracker.model.ApplicationStatus;
-import com.lundim.job_applications_tracker.model.JobApplication;
-import com.lundim.job_applications_tracker.model.JobType;
+import com.lundim.job_applications_tracker.model.enums.ApplicationStatus;
+import com.lundim.job_applications_tracker.model.entity.JobApplication;
+import com.lundim.job_applications_tracker.model.enums.JobType;
 import com.lundim.job_applications_tracker.repository.JobApplicationsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

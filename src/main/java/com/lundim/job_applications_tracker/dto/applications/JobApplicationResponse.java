@@ -1,8 +1,8 @@
 package com.lundim.job_applications_tracker.dto.applications;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.lundim.job_applications_tracker.model.ApplicationStatus;
-import com.lundim.job_applications_tracker.model.JobType;
+import com.lundim.job_applications_tracker.model.enums.ApplicationStatus;
+import com.lundim.job_applications_tracker.model.enums.JobType;
 import lombok.Builder;
 import lombok.Data;
 
