@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
+
 @Entity
 @Table(name = "users")
 @Data
@@ -34,6 +36,5 @@ public class CustomUser {
     private String password;
 
     @Column(nullable = false)
-    private String role;
-
+    private Instant createdAt;
 }

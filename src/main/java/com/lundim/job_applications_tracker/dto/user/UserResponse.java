@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.Instant;
+
 @Getter
 @Builder
 @JsonPropertyOrder({
@@ -18,4 +20,5 @@ public class UserResponse {
     private String firstName;
     private String lastName;
     private String email;
+    private Instant createdAt;
 }
