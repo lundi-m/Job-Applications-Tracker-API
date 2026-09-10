@@ -19,6 +19,10 @@ public class JobApplication {
             generator = "job_applications_id_sequence")
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private CustomUser user;
+
     private String companyName;
     private String jobTitle;
 
