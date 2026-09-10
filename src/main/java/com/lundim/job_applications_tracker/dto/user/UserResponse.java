@@ -1,4 +1,4 @@
-package com.lundim.job_applications_tracker.dto;
+package com.lundim.job_applications_tracker.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Builder;

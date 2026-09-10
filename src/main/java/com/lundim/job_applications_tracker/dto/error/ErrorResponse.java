@@ -1,4 +1,4 @@
-package com.lundim.job_applications_tracker.dto;
+package com.lundim.job_applications_tracker.dto.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ErrorResponseDTO {
+public class ErrorResponse {
     private LocalDateTime timestamp;
     private int status;
     private String error;

@@ -1,8 +1,8 @@
 package com.lundim.job_applications_tracker.service;
 
-import com.lundim.job_applications_tracker.dto.CreateJobApplicationDTO;
-import com.lundim.job_applications_tracker.dto.JobApplicationResponseDTO;
-import com.lundim.job_applications_tracker.dto.UpdateApplicationStatusDTO;
+import com.lundim.job_applications_tracker.dto.applications.CreateJobApplication;
+import com.lundim.job_applications_tracker.dto.applications.JobApplicationResponse;
+import com.lundim.job_applications_tracker.dto.applications.UpdateApplicationStatus;
 import com.lundim.job_applications_tracker.exception.ResourceNotFoundException;
 import com.lundim.job_applications_tracker.model.ApplicationStatus;
 import com.lundim.job_applications_tracker.model.JobApplication;
@@ -22,7 +22,7 @@ public class JobApplicationService {
     private final JobApplicationsRepository repository;
 
     // Create
-    public JobApplicationResponseDTO createJobApplication(CreateJobApplicationDTO dto) {
+    public JobApplicationResponse createJobApplication(CreateJobApplication dto) {
 
         LocalDate dateApplied = dto.getDateApplied() != null ? dto.getDateApplied() : LocalDate.now();
 
@@ -41,14 +41,14 @@ public class JobApplicationService {
     }
 
     // Read all
-    public List<JobApplicationResponseDTO> getAllJobApplications() {
+    public List<JobApplicationResponse> getAllJobApplications() {
         return repository.findAll().stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
 
     // Filter by id
-    public JobApplicationResponseDTO getJobApplicationById(Long id) {
+    public JobApplicationResponse getJobApplicationById(Long id) {
         JobApplication jobApplication = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Job Application with id: " + id + " not found."
@@ -57,7 +57,7 @@ public class JobApplicationService {
     }
 
     // Filter by Company Name
-    public List<JobApplicationResponseDTO> getByCompanyName(String companyName) {
+    public List<JobApplicationResponse> getByCompanyName(String companyName) {
         List<JobApplication> jobs = repository.findByCompanyNameIgnoreCase(companyName);
         return jobs.stream().
                 map(this::mapToDTO)
@@ -65,33 +65,33 @@ public class JobApplicationService {
     }
 
     // Filter by Application Status
-    public List<JobApplicationResponseDTO> getByStatus(String status) {
+    public List<JobApplicationResponse> getByStatus(String status) {
         ApplicationStatus applicationStatus = ApplicationStatus.fromString(status);
         List<JobApplication> jobs = repository.findByStatus(applicationStatus);
         return jobs.stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
     // Filter by Job Title
-    public List<JobApplicationResponseDTO> getByJobTitle(String jobTitle) {
+    public List<JobApplicationResponse> getByJobTitle(String jobTitle) {
         List<JobApplication> jobs = repository.findByJobTitle(jobTitle);
         return jobs.stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
     // Filter by Job Type
-    public List<JobApplicationResponseDTO> getByJobType(String jobTypeString) {
+    public List<JobApplicationResponse> getByJobType(String jobTypeString) {
         JobType jobType = JobType.fromString(jobTypeString);
         List<JobApplication> jobs = repository.findByJobType(jobType);
         return jobs.stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
     // Filter by Location
-    public List<JobApplicationResponseDTO> getByLocation(String location) {
+    public List<JobApplicationResponse> getByLocation(String location) {
         List<JobApplication> jobs = repository.findByLocationIgnoreCase(location);
         return jobs.stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
     // Update application status
-    public JobApplicationResponseDTO updateJobStatus(Long id, UpdateApplicationStatusDTO dto) {
+    public JobApplicationResponse updateJobStatus(Long id, UpdateApplicationStatus dto) {
         JobApplication job = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Job Application not found."));
 
@@ -108,8 +108,8 @@ public class JobApplicationService {
     }
 
     // Mapper
-    private JobApplicationResponseDTO mapToDTO(JobApplication job) {
-        return JobApplicationResponseDTO.builder()
+    private JobApplicationResponse mapToDTO(JobApplication job) {
+        return JobApplicationResponse.builder()
                 .id(job.getId())
                 .companyName(job.getCompanyName())
                 .jobTitle(job.getJobTitle())

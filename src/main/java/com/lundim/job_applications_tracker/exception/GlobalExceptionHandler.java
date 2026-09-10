@@ -1,6 +1,6 @@
 package com.lundim.job_applications_tracker.exception;
 
-import com.lundim.job_applications_tracker.dto.ErrorResponseDTO;
+import com.lundim.job_applications_tracker.dto.error.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -16,9 +16,9 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponseDTO> handleRuntimeException(ResourceNotFoundException exception){
+    public ResponseEntity<ErrorResponse> handleRuntimeException(ResourceNotFoundException exception){
 
-        ErrorResponseDTO error = ErrorResponseDTO.builder()
+        ErrorResponse error = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.NOT_FOUND.value())
                 .error(HttpStatus.NOT_FOUND.getReasonPhrase())
@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponseDTO> handleMethodNotValid(MethodArgumentNotValidException exception){
+    public ResponseEntity<ErrorResponse> handleMethodNotValid(MethodArgumentNotValidException exception){
 
         Map<String, String> errors = new HashMap<>();
 
@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
                     errors.put(fieldName, message);
                 });
 
-        ErrorResponseDTO error = ErrorResponseDTO.builder()
+        ErrorResponse error = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.BAD_REQUEST.value())
                 .error(errors.toString())
@@ -52,9 +52,9 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorResponseDTO> handleIllegalArgument(IllegalArgumentException exception) {
+    public ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException exception) {
 
-        ErrorResponseDTO error = ErrorResponseDTO.builder()
+        ErrorResponse error = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.BAD_REQUEST.value())
                 .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
@@ -65,9 +65,9 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponseDTO> handleGenericException(Exception exception){
+    public ResponseEntity<ErrorResponse> handleGenericException(Exception exception){
 
-        ErrorResponseDTO error = ErrorResponseDTO.builder()
+        ErrorResponse error = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())

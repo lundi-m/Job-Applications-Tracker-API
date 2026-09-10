@@ -1,7 +1,7 @@
 package com.lundim.job_applications_tracker.controller;
 
-import com.lundim.job_applications_tracker.dto.CreateJobApplicationDTO;
-import com.lundim.job_applications_tracker.dto.UpdateApplicationStatusDTO;
+import com.lundim.job_applications_tracker.dto.applications.CreateJobApplication;
+import com.lundim.job_applications_tracker.dto.applications.UpdateApplicationStatus;
 import com.lundim.job_applications_tracker.repository.TestDataUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class JobApplicationControllerIntegrationTests {
         return objectMapper.writeValueAsString(obj);
     }
 
-    private Long createApplicationAndGetApplicationId(CreateJobApplicationDTO dto) throws Exception {
+    private Long createApplicationAndGetApplicationId(CreateJobApplication dto) throws Exception {
         String response = mockMvc.perform(post("/job-applications")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(dto)))
@@ -44,7 +44,7 @@ public class JobApplicationControllerIntegrationTests {
 
     @Test
     public void testThatCreateJobApplicationReturnsStatus201Created() throws Exception {
-        CreateJobApplicationDTO request = TestDataUtil.createTestRequest();
+        CreateJobApplication request = TestDataUtil.createTestRequest();
 
         mockMvc.perform(post("/job-applications")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -61,8 +61,8 @@ public class JobApplicationControllerIntegrationTests {
 
     @Test
     public void testThatListJobApplicationsReturnsApplications() throws Exception {
-        CreateJobApplicationDTO requestA = TestDataUtil.createTestRequest();
-        CreateJobApplicationDTO requestB = TestDataUtil.createTestRequestB();
+        CreateJobApplication requestA = TestDataUtil.createTestRequest();
+        CreateJobApplication requestB = TestDataUtil.createTestRequestB();
 
         createApplicationAndGetApplicationId(requestA);
         createApplicationAndGetApplicationId(requestB);
@@ -75,7 +75,7 @@ public class JobApplicationControllerIntegrationTests {
 
     @Test
     public void testThatGetByIdReturnsJobApplication() throws Exception {
-        CreateJobApplicationDTO application = TestDataUtil.createTestRequestB();
+        CreateJobApplication application = TestDataUtil.createTestRequestB();
         Long id = createApplicationAndGetApplicationId(application);
 
         mockMvc.perform(get("/job-applications/{id}", id))
@@ -92,7 +92,7 @@ public class JobApplicationControllerIntegrationTests {
     @Test
     public void testThatGetByStatusReturnJobApplications() throws Exception {
 
-        CreateJobApplicationDTO application = TestDataUtil.createTestRequestB();
+        CreateJobApplication application = TestDataUtil.createTestRequestB();
         createApplicationAndGetApplicationId(application);
 
         mockMvc.perform(get("/job-applications/status/{status}", "APPLIED"))
@@ -102,7 +102,7 @@ public class JobApplicationControllerIntegrationTests {
 
     @Test
     public void testThatGetByCompanyNameReturnJobApplications() throws Exception {
-        CreateJobApplicationDTO application = TestDataUtil.createTestRequest();
+        CreateJobApplication application = TestDataUtil.createTestRequest();
         createApplicationAndGetApplicationId(application);
 
         mockMvc.perform(get("/job-applications/company/{company}", application.getCompanyName()))
@@ -112,7 +112,7 @@ public class JobApplicationControllerIntegrationTests {
 
     @Test
     public void testThatGetByJobTitleReturnJobApplications() throws Exception {
-        CreateJobApplicationDTO application = TestDataUtil.createTestRequest();
+        CreateJobApplication application = TestDataUtil.createTestRequest();
         createApplicationAndGetApplicationId(application);
 
         mockMvc.perform(get("/job-applications/job-title/{title}", application.getJobTitle()))
@@ -122,7 +122,7 @@ public class JobApplicationControllerIntegrationTests {
 
     @Test
     public void testThatGetByJobTypeReturnJobApplications() throws Exception {
-        CreateJobApplicationDTO application = TestDataUtil.createTestRequest();
+        CreateJobApplication application = TestDataUtil.createTestRequest();
         createApplicationAndGetApplicationId(application);
 
         mockMvc.perform(get("/job-applications/job-type/{type}", application.getJobType()))
@@ -132,7 +132,7 @@ public class JobApplicationControllerIntegrationTests {
 
     @Test
     public void testThatGetByLocationReturnJobApplications() throws Exception {
-        CreateJobApplicationDTO application = TestDataUtil.createTestRequest();
+        CreateJobApplication application = TestDataUtil.createTestRequest();
         createApplicationAndGetApplicationId(application);
 
         mockMvc.perform(get("/job-applications/location/{location}", application.getLocation()))
@@ -143,10 +143,10 @@ public class JobApplicationControllerIntegrationTests {
 
     @Test
     public void testThatJobApplicationStatusCanBeUpdated() throws Exception {
-        CreateJobApplicationDTO application = TestDataUtil.createTestRequest();
+        CreateJobApplication application = TestDataUtil.createTestRequest();
         Long id = createApplicationAndGetApplicationId(application);
 
-        UpdateApplicationStatusDTO update = new UpdateApplicationStatusDTO();
+        UpdateApplicationStatus update = new UpdateApplicationStatus();
         update.setStatus("Interview");
 
         mockMvc.perform(patch("/job-applications/{id}/status", id)

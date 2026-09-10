@@ -1,4 +1,4 @@
-package com.lundim.job_applications_tracker.dto;
+package com.lundim.job_applications_tracker.dto.applications;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.lundim.job_applications_tracker.model.ApplicationStatus;
@@ -20,7 +20,7 @@ import java.time.LocalDate;
         "dateApplied",
         "statusUpdateDate"
 })
-public class JobApplicationResponseDTO {
+public class JobApplicationResponse {
 
     private Long id;
     private String companyName;

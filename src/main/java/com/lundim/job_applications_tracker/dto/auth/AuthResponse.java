@@ -1,4 +1,4 @@
-package com.lundim.job_applications_tracker.dto;
+package com.lundim.job_applications_tracker.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

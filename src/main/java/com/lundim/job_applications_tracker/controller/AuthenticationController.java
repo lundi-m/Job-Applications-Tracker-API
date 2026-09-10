@@ -1,9 +1,9 @@
 package com.lundim.job_applications_tracker.controller;
 
-import com.lundim.job_applications_tracker.dto.AuthResponse;
-import com.lundim.job_applications_tracker.dto.LoginRequest;
-import com.lundim.job_applications_tracker.dto.RegisterRequest;
-import com.lundim.job_applications_tracker.dto.UserResponse;
+import com.lundim.job_applications_tracker.dto.auth.AuthResponse;
+import com.lundim.job_applications_tracker.dto.auth.LoginRequest;
+import com.lundim.job_applications_tracker.dto.auth.RegisterRequest;
+import com.lundim.job_applications_tracker.dto.user.UserResponse;
 import com.lundim.job_applications_tracker.security.AuthenticationService;
 import com.lundim.job_applications_tracker.security.JwtService;
 import jakarta.validation.Valid;

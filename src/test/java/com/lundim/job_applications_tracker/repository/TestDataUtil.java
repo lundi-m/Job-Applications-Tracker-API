@@ -1,6 +1,6 @@
 package com.lundim.job_applications_tracker.repository;
 
-import com.lundim.job_applications_tracker.dto.CreateJobApplicationDTO;
+import com.lundim.job_applications_tracker.dto.applications.CreateJobApplication;
 import com.lundim.job_applications_tracker.model.ApplicationStatus;
 import com.lundim.job_applications_tracker.model.JobApplication;
 import com.lundim.job_applications_tracker.model.JobType;
@@ -53,8 +53,8 @@ public class TestDataUtil {
                 .build();
     }
 
-    public static CreateJobApplicationDTO createTestRequest() {
-        return CreateJobApplicationDTO.builder()
+    public static CreateJobApplication createTestRequest() {
+        return CreateJobApplication.builder()
                 .companyName("Hisense")
                 .jobTitle("Developer")
                 .jobType("Part time")
@@ -63,8 +63,8 @@ public class TestDataUtil {
                 .build();
     }
 
-    public static CreateJobApplicationDTO createTestRequestB() {
-        return CreateJobApplicationDTO.builder()
+    public static CreateJobApplication createTestRequestB() {
+        return CreateJobApplication.builder()
                 .companyName("Hisense")
                 .jobTitle("IT Support")
                 .jobType("FULL TIME")
