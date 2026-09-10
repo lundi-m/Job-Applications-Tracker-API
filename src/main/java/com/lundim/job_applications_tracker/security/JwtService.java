@@ -16,16 +16,20 @@ public class JwtService {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    public String generateToken(UserDetails userDetails) {
-        Long jwtExpiryMs = 86400000L;
+    @Value("${jwt.access-token-expiration-ms}")
+    private long accessTokenExpirationMs;
 
+    public String generateAccessToken(String username){
+        Date now = new Date();
+        Date expiry = new Date(now.getTime() + accessTokenExpirationMs);
         return Jwts.builder()
-                .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiryMs))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .setSubject(username)
+                .setIssuedAt(now)
+                .setExpiration(expiry)
+                .signWith(getSigningKey())
                 .compact();
     }
+
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
         try {

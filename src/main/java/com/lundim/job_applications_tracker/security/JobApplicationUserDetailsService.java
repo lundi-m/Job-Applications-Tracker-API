@@ -15,7 +15,7 @@ public class JobApplicationUserDetailsService implements UserDetailsService {
 
     private UserRepository userRepository;
 
-        @Override
+    @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         CustomUser customUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found."));
@@ -23,7 +23,6 @@ public class JobApplicationUserDetailsService implements UserDetailsService {
         return User.builder()
                 .username(customUser.getEmail())
                 .password(customUser.getPassword())
-                .roles(customUser.getRole())
                 .build();
     }
 }
