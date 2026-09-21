@@ -1,7 +1,5 @@
 package com.lundim.job_applications_tracker.repository;
 
-import com.lundim.job_applications_tracker.dto.applications.JobApplicationResponse;
-import com.lundim.job_applications_tracker.model.entity.CustomUser;
 import com.lundim.job_applications_tracker.model.enums.ApplicationStatus;
 import com.lundim.job_applications_tracker.model.entity.JobApplication;
 import com.lundim.job_applications_tracker.model.enums.JobType;
@@ -11,21 +9,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.parameters.P;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
 
+@Repository
 public interface JobApplicationsRepository extends JpaRepository<JobApplication, Long> {
-
-
-    List<JobApplication> findByStatus(ApplicationStatus status);
-
-    List<JobApplication> findByJobTitle(String jobTitle);
-
-    List<JobApplication> findByCompanyNameIgnoreCase(String companyName);
-
-    List<JobApplication> findByJobType(JobType jobType);
-
-    List<JobApplication> findByLocationIgnoreCase(String location);
 
     @Query("""
         SELECT j
