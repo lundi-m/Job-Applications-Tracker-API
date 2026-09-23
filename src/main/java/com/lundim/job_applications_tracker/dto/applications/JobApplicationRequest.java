@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateJobApplication {
+public class JobApplicationRequest {
 
     @NotBlank
     private String companyName;
