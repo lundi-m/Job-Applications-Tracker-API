@@ -1,46 +1,82 @@
-# **Job Applications Tracker**
+# Job Applications Tracker
 
-A full-stack backend application built with Spring Boot for managing and tracking job applications. Users can create, update, search, and manage applications through a RESTful API.
+A backend REST API built with Spring Boot for managing and tracking job applications. The application supports user authentication, JWT-based security, application management, filtering, validation, and PostgreSQL persistence.
 
 ## Features
 
-- Create job applications
-- Update application details
-- Search applications 
-- Delete applications
-- RESTful API architecture
-- DTO validation
-- Integration & unit testing
-- Docker support
-- PostgreSQL database integration
+* User registration and authentication
+* JWT-based authentication and authorization
+* Access and refresh token support
+* Refresh token invalidation
+* Create job applications
+* Get all applications for the authenticated user
+* Get a job application by ID
+* Update application details
+* Update application status
+* Delete applications
+* Filter applications by multiple criteria
+* DTO-based request and response handling
+* Request validation
+* Exception handling
+* PostgreSQL database integration
+* Unit, controller, repository, and integration testing
+* Docker and Docker Compose support
 
 ## Tech Stack
 
 * Java 17
 * Spring Boot
 * Spring Web
+* Spring Security
+* JWT
 * Spring Data JPA
-* Maven
+* Hibernate
 * PostgreSQL
-* Testing
+* Maven
+* Lombok
+* JUnit
 * Mockito
-* Spring Boot Test
+* MockMvc
 * Docker
 * Docker Compose
 
+## Architecture
+
+The application follows a layered architecture:
+
+```text
+Controller
+    ↓
+Service
+    ↓
+Repository
+    ↓
+PostgreSQL
+```
+
+DTOs are used to separate API request/response models from persistence entities, while Spring Security handles authentication and authorization.
+
 ## Project Structure
 
-```
+```text
 job-applications-tracker/
 │
 ├── src/
 │   ├── main/
 │   │   ├── java/
+│   │   │   └── com/lundim/job_applications_tracker/
+│   │   │       ├── controller/
+│   │   │       ├── dto/
+│   │   │       ├── entity/
+│   │   │       ├── exception/
+│   │   │       ├── repository/
+│   │   │       ├── security/
+│   │   │       └── service/
+│   │   │
 │   │   └── resources/
 │   │
 │   └── test/
 │
-├── target/
 ├── Dockerfile
 ├── compose.yaml
 ├── pom.xml
@@ -49,77 +85,152 @@ job-applications-tracker/
 └── README.md
 ```
 
-
 ## API Endpoints
 
-| Method | Endpoint                                  | Description                                |
-|--------|-------------------------------------------|--------------------------------------------|
-| POST   | `/job-applications`                       | Create application                         |
-| GET    | `/job-applications`                       | Get all applications                       |
-| GET    | `/job-applications/{id}`                  | Get application by ID                      |
-| GET    | `/job-applications/company/{companyName}` | Get applications by company name           |
-| GET    | `/job-applications/status/{status}`       | Get applications by status                 |
-| GET    | `/job-applications/job-type/{jobType}`    | Get applications by job type               |
-| GET    | `/job-applications/job-title/{jobTitle}`  | Get applications by job title              |
-| GET    | `/job-applications/location/{location}`   | Get applications by location               |
-| PATCH  | `/job-applications/{id}/status"`          | Update application status                  |
-| DELETE | `/job-applications/{id}"`                 | Delete an application using application id |
+### Authentication
 
+| Method | Endpoint                          | Description                  |
+| ------ | --------------------------------- | ---------------------------- |
+| POST   | `/job-applications/auth/register` | Register a new user          |
+| POST   | `/job-applications/auth/login`    | Authenticate a user          |
+| POST   | `/job-applications/auth/refresh`  | Refresh an access token      |
+| POST   | `/job-applications/auth/logout`   | Invalidate the refresh token |
 
-## Running the Application Locally
+### Job Applications
 
-### 1. **Clone the Repository**
+| Method | Endpoint                        | Description                               |
+| ------ | ------------------------------- | ----------------------------------------- |
+| POST   | `/job-applications`             | Create a job application                  |
+| GET    | `/job-applications`             | Get the authenticated user's applications |
+| GET    | `/job-applications/{id}`        | Get a job application by ID               |
+| PATCH  | `/job-applications/{id}`        | Update application details                |
+| PATCH  | `/job-applications/{id}/status` | Update application status                 |
+| DELETE | `/job-applications/{id}`        | Delete a job application                  |
 
-   git clone <repository-url>\
-   cd job-applications-tracker
+### Filtering
 
-### 2. Configure PostgreSQL
+Applications can be filtered using query parameters such as:
 
-   **Update your application.properties:**
-   
-   spring.datasource.url=jdbc:postgresql://localhost:5432/job_tracker
-   spring.datasource.username=postgres
-   spring.datasource.password=your_password
-   
-   spring.jpa.hibernate.ddl-auto=update
+* `companyName`
+* `jobTitle`
+* `status`
+* `jobType`
+* `location`
 
-### 3. Run the Application
+Example:
 
-##### Using Maven:
-./mvnw spring-boot:run
+```text
+GET /job-applications?companyName=Google&status=APPLIED
+```
 
-Or:
+Multiple filters can be combined in a single request.
 
-mvn spring-boot:run\
+## Authentication
 
-#### Running with Docker
-- Build and Start Containers: docker compose up --build\
-- Stop Containers: docker compose down\
-- Running Tests: mvn test
+The API uses JWT-based authentication.
 
-## **Example JSON Request**
+After successfully logging in, the client receives an access token and refresh token. Protected endpoints require a valid access token.
+
+Refresh tokens can be invalidated during logout, preventing them from being reused.
+
+## Example JSON Request
 
 ### Create Application
-```
+
+```json
 {
-   "companyName":"Google",
-   "jobTitle":"Backend Developer",
-   "jobType":"INTERNSHIP", 
-   "location": "Pretoria"
+  "companyName": "Google",
+  "jobTitle": "Backend Developer",
+  "jobType": "INTERNSHIP",
+  "location": "Pretoria",
+  "dateApplied": "2026-09-23"
 }
 ```
 
-## **Future Improvements**
-* Authentication & Authorization
-* Pagination & Sorting
-* Swagger/OpenAPI documentation
+## Running the Application Locally
 
-## **Learning Goals**
-**This project was built to strengthen understanding of:**
+### 1. Clone the Repository
 
-* Spring Boot architecture
-* REST API development
-* Database integration with JPA
-* Docker containerization
-* Testing in Spring Boot
-* Backend project structure and best practices
+```bash
+git clone https://github.com/lundi-m/Job-Applications-Tracker-API
+cd job-applications-tracker
+```
+
+### 2. Configure PostgreSQL
+
+Create a PostgreSQL database and configure the application with your database credentials.
+
+For local development, configure the datasource in `application.properties`:
+
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/job_tracker
+spring.datasource.username=your_username
+spring.datasource.password=your_password
+
+spring.jpa.hibernate.ddl-auto=update
+```
+
+### 3. Run the Application
+
+Using the Maven wrapper:
+
+```bash
+./mvnw spring-boot:run
+```
+
+Or with Maven:
+
+```bash
+mvn spring-boot:run
+```
+
+### 4. Run Tests
+
+```bash
+mvn test
+```
+
+## Running with Docker
+
+Build and start the application and PostgreSQL containers:
+
+```bash
+docker compose up --build
+```
+
+Stop the containers:
+
+```bash
+docker compose down
+```
+
+The application will be available at:
+
+```text
+http://localhost:8080
+```
+
+The PostgreSQL database runs inside the Docker Compose network and is accessed by the application using the `db` service name.
+
+## Testing
+
+The project includes:
+
+* Unit tests
+* Controller tests
+* Repository tests
+* Integration tests
+
+Testing tools include:
+
+* JUnit
+* Mockito
+* Spring Boot Test
+* MockMvc
+* H2 for test database scenarios
+
+## Future Improvements
+
+Potential future improvements include:
+* Deployment
+
