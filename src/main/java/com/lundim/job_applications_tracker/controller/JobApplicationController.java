@@ -1,7 +1,7 @@
 package com.lundim.job_applications_tracker.controller;
 
 
-import com.lundim.job_applications_tracker.dto.applications.CreateJobApplication;
+import com.lundim.job_applications_tracker.dto.applications.JobApplicationRequest;
 import com.lundim.job_applications_tracker.dto.applications.JobApplicationResponse;
 import com.lundim.job_applications_tracker.dto.applications.UpdateApplicationStatus;
 import com.lundim.job_applications_tracker.model.enums.ApplicationStatus;
@@ -16,8 +16,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/job-applications")
 @RequiredArgsConstructor
@@ -28,9 +26,10 @@ public class JobApplicationController {
     @PostMapping
     public ResponseEntity<JobApplicationResponse> createJobApplication(
             @AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody CreateJobApplication dto
+            @Valid @RequestBody JobApplicationRequest request
     ) {
-        JobApplicationResponse response = service.createJobApplication(userDetails.getUsername(), dto);
+        JobApplicationResponse response = service.createJobApplication(userDetails.getUsername(), request);
+
         return ResponseEntity.status(201).body(response);
     }
 
@@ -53,17 +52,34 @@ public class JobApplicationController {
         ));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<JobApplicationResponse> getJobApplication(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long id) {
+
+        JobApplicationResponse response = service.getJobApplication(userDetails.getUsername(), id);
+
+        return ResponseEntity.ok(response);
+    }
+
     @PatchMapping("/{id}/status")
-    public ResponseEntity<JobApplicationResponse> updateApplicationStatus(
+    public ResponseEntity<JobApplicationResponse> updateJobStatus(
+            @AuthenticationPrincipal UserDetails userDetails,
             @PathVariable Long id,
-            @Valid @RequestBody UpdateApplicationStatus dto) {
-        JobApplicationResponse updatedJobApplication = service.updateJobStatus(id, dto);
-        return ResponseEntity.ok(updatedJobApplication);
+            @Valid @RequestBody UpdateApplicationStatus request) {
+
+        JobApplicationResponse response = service.updateJobStatus(userDetails.getUsername(), id, request);
+
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteJobApplication(@PathVariable Long id) {
-        service.deleteJobApplication(id);
+    public ResponseEntity<Void> deleteJobApplication(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long id) {
+
+        service.deleteJobApplication(userDetails.getUsername(), id);
+
         return ResponseEntity.noContent().build();
     }
 }
